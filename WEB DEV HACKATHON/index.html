@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StreetMate – Supplier Finder</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* CSS Variables for better maintainability */
+    :root {
+      --primary-color: #0d6efd;
+      --secondary-color: #f8f9fa;
+      --text-color: #333;
+      --light-gray: #e9ecef;
+    }
+
+    body {
+      background-color: var(--secondary-color);
+      font-family: 'Roboto', sans-serif; /* Using a more common font for better cross-platform consistency */
+      color: var(--text-color);
+    }
+
+    /* Navbar Branding */
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.8rem; /* Slightly larger for prominence */
+      color: var(--primary-color) !important; /* Original color */
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .navbar-brand:hover {
+      transform: scale(1.05); /* Subtle hover effect */
+    }
+
+    /* Navbar Home Button */
+    .btn-outline-primary {
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+      transition: all 0.3s ease; /* Smooth transition for hover effects */
+    }
+
+    .btn-outline-primary:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    /* Headings */
+    h1, h2 {
+      color: var(--primary-color);
+      font-weight: 700;
+      margin-bottom: 1.5rem; /* Consistent spacing */
+    }
+
+    /* Card Image Styles */
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+      border-bottom: 1px solid var(--light-gray); /* Subtle separator */
+    }
+
+    /* Card Title Styles */
+    .card-title {
+      font-size: 1.35rem; /* Slightly larger title */
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    /* Contact Buttons */
+    .contact-buttons .btn {
+      border-radius: 25px;
+      padding: 0.5rem 1.2rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    /* Card Hover Effect */
+    .card {
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+      border: none; /* Remove default card border */
+      border-radius: 0.75rem; /* Slightly rounded corners */
+      overflow: hidden; /* Ensures content respects border-radius */
+    }
+
+    .card:hover {
+      transform: translateY(-5px); /* Lift effect on hover */
+      box-shadow: 0 1rem 2rem rgba(0,0,0,0.1); /* More pronounced shadow */
+    }
+
+    /* Category Icons */
+    .category-icon {
+      font-size: 2.5rem; /* Larger icons */
+      line-height: 1; /* Adjust line height for icon centering */
+      margin-bottom: 0.5rem;
+    }
+
+    .category-card-text {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-color);
+    }
+
+    /* Footer Styles */
+    footer {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 30px 0; /* More padding for a better look */
+      margin-top: 4rem; /* Spacing before footer */
+      background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); /* A subtle pattern */
+      background-blend-mode: overlay; /* To blend with the solid background color */
+    }
+
+    footer p {
+      margin-bottom: 0.5rem; /* Spacing for paragraphs in footer */
+      font-size: 0.95rem;
+    }
+
+    /* Form Select Styles */
+    .form-select {
+        border-radius: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        border-color: var(--light-gray);
+    }
+
+    .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+    /* Loading Spinner */
+    .loading-spinner {
+        display: none; /* Hidden by default, shown with JS */
+        text-align: center;
+        padding: 30px;
+    }
+
+    .loading-spinner .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        color: var(--primary-color);
+    }
+
+    /* ==================================== */
+    /* ✅ Hero Section Background (UPDATED) */
+    /* ==================================== */
+    .hero-section {
+      background: url('https://t4.ftcdn.net/jpg/06/86/05/65/360_F_686056517_w3FsaihWAAsdNCwp7HKSIMZRwDVnik8P.jpg') no-repeat center center; /* Using your uploaded image */
+      background-size: cover; /* Ensures the image covers the entire section */
+      padding: 80px 20px;
+      color: white; /* Text color remains white for contrast */
+      text-align: center;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      min-height: 300px; /* Ensure sufficient height for the background image */
+      display: flex; /* Use flexbox to center content */
+      flex-direction: column;
+      justify-content: center;
+      align-items: center; /* Center content horizontally and vertically */
+      position: relative; /* Needed for pseudo-element overlay */
+      overflow: hidden; /* Important to contain the pseudo-element's border-radius */
+    }
+
+    /* Pseudo-element for dark overlay on hero image */
+    .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity (0.0 to 1.0) for desired darkness */
+        border-radius: 10px; /* Match parent border-radius */
+        z-index: 0; /* Place behind the text content */
+    }
+
+    /* Ensure hero text content is above the overlay */
+    .hero-section h1,
+    .hero-section p.lead {
+        position: relative; /* Essential to bring text above the overlay */
+        z-index: 1; /* Bring text to front */
+    }
+
+    .hero-section h1 {
+      color: white; /* Ensure heading color is white */
+      text-shadow: 1px 1px 5px rgba(0,0,0,0.8); /* Stronger shadow for better visibility */
+      font-size: 3.5rem; /* Larger font size for impact */
+      margin-bottom: 15px;
+    }
+
+    .hero-section p.lead {
+      color: #e9ecef; /* Slightly off-white for contrast */
+      font-size: 1.25rem;
+      max-width: 700px; /* Constrain width for readability */
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.6); /* Add shadow to lead text too */
+    }
+
+    .categories-bg {
+      background: url('');
+      background-color: #f1f3f5; /* A light background color behind the texture */
+      padding: 40px 20px;
+      border-radius: 10px;
+      margin-bottom: 40px;
+      box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.05); /* Subtle shadow for depth */
+    }
+
+    /* Specific styling for Top Categories section h2 */
+    .categories-bg h2 {
+        margin-bottom: 30px;
+    }
+
+    /* Ensure consistent spacing for cards within categories-bg */
+    .categories-bg .row.justify-content-center .col-md-2 {
+        margin-bottom: 15px; /* Adjust as needed */
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 60px 15px;
+            min-height: 250px;
+        }
+        .hero-section h1 {
+            font-size: 2.5rem;
+        }
+        .hero-section p.lead {
+            font-size: 1rem;
+        }
+        .categories-bg {
+            padding: 30px 15px;
+        }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top" aria-label="Main navigation">
+      <div class="container">
+        <a class="navbar-brand" href="#">🛒 StreetMate</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="btn btn-outline-primary" href="Home.html">Home</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero-section container">
+      <h1 class="display-5">Find Trusted Suppliers Near You</h1>
+      <p class="lead mt-3">Easily locate raw material suppliers for your street food business.</p>
+    </section>
+
+    <section class="container py-5">
+      <div class="row justify-content-center mb-4">
+        <div class="col-md-4 mb-2">
+          <label for="areaFilter" class="visually-hidden">Filter by Area</label>
+          <select id="areaFilter" class="form-select shadow-sm" aria-label="Filter by Area">
+            <option value="all">Filter by Area</option>
+            <option value="mumbai">Mumbai</option>
+            <option value="delhi">Delhi</option>
+            </select>
+        </div>
+        <div class="col-md-4 mb-2">
+          <label for="categoryFilter" class="visually-hidden">Filter by Category</label>
+          <select id="categoryFilter" class="form-select shadow-sm" aria-label="Filter by Category">
+            <option value="all">Filter by Category</option>
+            <option value="rice">Rice</option>
+            <option value="oil">Oil</option>
+            <option value="spices">Spices</option>
+            <option value="vegetables">Vegetables</option>
+            <option value="dairy">Dairy</option>
+            </select>
+        </div>
+      </div>
+
+      <div class="row" id="supplierList">
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading suppliers...</span>
+            </div>
+            <p class="mt-2">Loading suppliers...</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="categories-bg container py-4">
+      <h2 class="text-center mb-4">Top Categories</h2>
+      <div class="row justify-content-center g-3"> <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6 mb-3">
+          <div class="card p-3 shadow-sm text-center h-100 d-flex flex-column justify-content-center align-items-center">
+            <div class="category-icon" aria-hidden="true">🍚</div>
+            <h6 class="mt-2 category-card-text">Rice Suppliers</h6>
+          </div>
+        </div>
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6 mb-3">
+          <div class="card p-3 shadow-sm text-center h-100 d-flex flex-column justify-content-center align-items-center">
+            <div class="category-icon" aria-hidden="true">🛢️</div>
+            <h6 class="mt-2 category-card-text">Oil Vendors</h6>
+          </div>
+        </div>
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6 mb-3">
+          <div class="card p-3 shadow-sm text-center h-100 d-flex flex-column justify-content-center align-items-center">
+            <div class="category-icon" aria-hidden="true">🌶️</div>
+            <h6 class="mt-2 category-card-text">Spices Dealers</h6>
+          </div>
+        </div>
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6 mb-3">
+          <div class="card p-3 shadow-sm text-center h-100 d-flex flex-column justify-content-center align-items-center">
+            <div class="category-icon" aria-hidden="true">🥕</div>
+            <h6 class="mt-2 category-card-text">Vegetable Markets</h6>
+          </div>
+        </div>
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6 mb-3">
+          <div class="card p-3 shadow-sm text-center h-100 d-flex flex-column justify-content-center align-items-center">
+            <div class="category-icon" aria-hidden="true">🥛</div>
+            <h6 class="mt-2 category-card-text">Dairy Milk Suppliers</h6>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container my-5">
+      <h2 class="text-center mb-4">How StreetMate Works</h2>
+      <div class="row text-center g-4">
+        <div class="col-md-4">
+          <div class="card p-4 shadow-sm h-100">
+            <h5 class="card-title">1. Apply Filters</h5>
+            <p class="card-text">Select your area & category to find suppliers easily.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card p-4 shadow-sm h-100">
+            <h5 class="card-title">2. View Details</h5>
+            <p class="card-text">Check suppliers with images and pricing details.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card p-4 shadow-sm h-100">
+            <h5 class="card-title">3. Contact Supplier</h5>
+            <p class="card-text">Click to call or message the supplier directly.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="text-center">
+    <div class="container">
+      <p class="mb-1">📞 Contact Us: <a href="mailto:support@streetmate.com" class="text-white text-decoration-none">support@streetmate.com</a></p>
+      <p class="mb-1">📍 India</p>
+      <p>&copy; 2025 StreetMate. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
